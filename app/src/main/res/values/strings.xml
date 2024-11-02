@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Calculator</string>
+    <string name="calculate">Calculate</string>
+    <string name="input_invalidate">输入不合法，请检查后再试！</string>
+</resources>
