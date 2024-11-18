@@ -36,4 +36,6 @@ dependencyResolutionManagement {
 rootProject.name = "ASMTest"
 include(":app")
 include(":data-report")
- 
+include(":library-base")
+include(":lib-player")
+include(":floating")

@@ -9,6 +9,8 @@ import android.util.Log
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.Button
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.isVisible
@@ -40,6 +42,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
             )
         )
     }
+    private var exitTime = 0L
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater, null, false) }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +50,18 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         setContentView(binding.root)
         initView()
         setUpJavaAirBag(configList)
+        //双击返回键回退桌面
+        onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (System.currentTimeMillis() - exitTime > 2000) {
+                    exitTime = System.currentTimeMillis()
+                    val msg = getString(R.string.one_more_press_2_back)
+                    Toast.makeText(this@MainActivity, msg, Toast.LENGTH_SHORT).show()
+                } else {
+                    moveTaskToBack(true)
+                }
+            }
+        })
     }
 
     private fun initView() {

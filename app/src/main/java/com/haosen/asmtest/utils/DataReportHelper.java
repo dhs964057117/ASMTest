@@ -19,7 +19,7 @@ import android.widget.ToggleButton;
 import androidx.annotation.Keep;
 import androidx.appcompat.widget.SwitchCompat;
 
-//import com.example.miaow.base.adapter.BaseAdapter;
+//import com.haosen.tools.base.adapter.BaseAdapter;
 @Keep
 public class DataReportHelper {
 
