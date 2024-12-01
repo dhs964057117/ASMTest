@@ -1,9 +1,11 @@
-package com.haosen.floating
+package com.haosen.floating.manager
 
 import android.content.Context
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import androidx.annotation.LayoutRes
+import com.haosen.floating.R
+import com.haosen.floating.core.FloatingView
 
 /**
  * FileName: EnFloatingView

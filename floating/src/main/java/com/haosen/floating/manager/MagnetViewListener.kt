@@ -1,4 +1,6 @@
-package com.haosen.floating
+package com.haosen.floating.manager
+
+import com.haosen.floating.core.FloatingView
 
 /**
  * FileName: MagnetViewListener

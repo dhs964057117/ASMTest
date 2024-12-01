@@ -1,4 +1,4 @@
-package com.haosen.floating
+package com.haosen.floating.core
 
 import android.app.Activity
 import android.os.Handler
@@ -11,17 +11,22 @@ import android.widget.RelativeLayout
 import androidx.annotation.DrawableRes
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import com.haosen.floating.R
+import com.haosen.floating.manager.Config
+import com.haosen.floating.manager.MagnetViewListener
+import com.haosen.floating.manager.SampleFloatingView
 import com.haosen.floating.utils.LifecycleUtils
 import java.lang.ref.WeakReference
-import kotlin.concurrent.Volatile
+
 
 /**
- * FileName: FloatingView
+ * FileName: FloatingImpl
  * Author: haosen
- * Date: 2024/11/17 20:50
+ * Date: 2024/11/30 14:37
  * Description:
- */
-class Floating private constructor() : IFloatingView {
+ **/
+class FloatingImpl(config: Config) : IFloatingView {
     private var mEnFloatingView: FloatingView? = null
     private var mContainer: WeakReference<FrameLayout>? = null
 
@@ -33,7 +38,7 @@ class Floating private constructor() : IFloatingView {
     private var mLayoutParams: ViewGroup.LayoutParams = params
 
 
-    override fun remove(): Floating {
+    override fun remove() {
         Handler(Looper.getMainLooper()).post {
             if (mEnFloatingView == null) {
                 return@post
@@ -43,7 +48,6 @@ class Floating private constructor() : IFloatingView {
             }
             mEnFloatingView = null
         }
-        return this
     }
 
     private fun ensureFloatingView() {
@@ -60,22 +64,25 @@ class Floating private constructor() : IFloatingView {
         }
     }
 
-    override fun show(): Floating {
+    override fun show() {
         ensureFloatingView()
-        return this
     }
 
-    override fun hide(): Floating {
+    override fun hide() {
         mEnFloatingView?.visibility = View.GONE
+    }
+
+    internal fun attach(fragment: Fragment?): FloatingImpl {
+        attach(getActivityRoot(fragment?.activity))
         return this
     }
 
-    internal fun attach(activity: Activity?): Floating {
+    internal fun attach(activity: Activity?): FloatingImpl {
         attach(getActivityRoot(activity))
         return this
     }
 
-    private fun attach(container: FrameLayout?): Floating {
+    private fun attach(container: FrameLayout?): FloatingImpl {
         if (container == null || mEnFloatingView == null) {
             mContainer = WeakReference(container)
             return this
@@ -91,12 +98,17 @@ class Floating private constructor() : IFloatingView {
         return this
     }
 
-    internal fun detach(activity: Activity?): Floating {
+    internal fun detach(fragment: Fragment?): FloatingImpl {
+        detach(getActivityRoot(fragment?.activity))
+        return this
+    }
+
+    internal fun detach(activity: Activity?): FloatingImpl {
         detach(getActivityRoot(activity))
         return this
     }
 
-    private fun detach(container: FrameLayout?): Floating {
+    private fun detach(container: FrameLayout?): FloatingImpl {
         if (mEnFloatingView != null && container != null && mEnFloatingView!!.isAttachedToWindow) {
             container.removeView(mEnFloatingView)
         }
@@ -109,28 +121,18 @@ class Floating private constructor() : IFloatingView {
     override val view: FloatingView? = mEnFloatingView
 
 
-    override fun icon(@DrawableRes resId: Int): Floating {
+    override fun icon(@DrawableRes resId: Int): FloatingImpl {
         mIconRes = resId
         return this
     }
 
-    override fun customView(viewGroup: FloatingView?): Floating {
-        mEnFloatingView = viewGroup
-        return this
-    }
-
-    override fun customView(@LayoutRes resource: Int): Floating {
-        mLayoutId = resource
-        return this
-    }
-
-    override fun layoutParams(params: ViewGroup.LayoutParams): Floating {
+    override fun layoutParams(params: ViewGroup.LayoutParams): FloatingImpl {
         mLayoutParams = params
         mEnFloatingView?.layoutParams = params
         return this
     }
 
-    override fun listener(magnetViewListener: MagnetViewListener): Floating {
+    override fun listener(magnetViewListener: MagnetViewListener): FloatingImpl {
         mEnFloatingView?.setMagnetViewListener(magnetViewListener)
         return this
     }
@@ -161,30 +163,5 @@ class Floating private constructor() : IFloatingView {
             e.printStackTrace()
         }
         return null
-    }
-
-    fun with(target: Any): Floating {
-        if (target is Activity) {
-            LifecycleUtils.init(target.application)
-        }else if (target is Fragment){
-
-            LifecycleUtils.init(target?.)
-        }
-        return this
-    }
-
-    companion object {
-        @Volatile
-        private var mInstance: Floating? = null
-        fun get(): Floating {
-            if (mInstance == null) {
-                synchronized(Floating::class.java) {
-                    if (mInstance == null) {
-                        mInstance = Floating()
-                    }
-                }
-            }
-            return mInstance!!
-        }
     }
 }

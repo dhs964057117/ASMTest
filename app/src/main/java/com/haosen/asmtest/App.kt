@@ -2,7 +2,7 @@ package com.haosen.asmtest
 
 import android.app.Application
 import androidx.lifecycle.ProcessLifecycleOwner
-import com.haosen.floating.Floating
+import com.haosen.floating.core.Floating
 import com.haosen.tools.base.http.OkHelper
 import com.haosen.tools.base.http.setBaseUrl
 import com.haosen.tools.base.http.setHttpClient
@@ -19,6 +19,6 @@ class App : Application() {
         application = this
         setBaseUrl("https://www.wanandroid.com/")
         setHttpClient(OkHelper.httpClient(applicationContext))
-        Floating.get().with(this).show()
+        Floating.config().with(this).show()
     }
 }

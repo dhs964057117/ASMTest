@@ -1,4 +1,4 @@
-package com.haosen.floating
+package com.haosen.floating.core
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -9,6 +9,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import com.haosen.floating.manager.MagnetViewListener
 import com.haosen.floating.utils.SystemUtils.getStatusBarHeight
 import kotlin.math.max
 import kotlin.math.min
